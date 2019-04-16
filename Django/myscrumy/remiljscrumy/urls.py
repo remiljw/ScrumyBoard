@@ -5,10 +5,6 @@ app_name = 'remiljscrumy'
 
 
 urlpatterns = [
-    path('',views.index,name='index'),
-   
-
-    path('<int:id>/', views.move_goal, name = "move_goal"),
 
     path('accounts/', include('django.contrib.auth.urls')),
 ]
