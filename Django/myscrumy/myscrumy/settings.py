@@ -32,8 +32,8 @@ SECRET_KEY = 'qb#8(at^0dx=dq*m14(jz^&idc9i9&a)kk3z2@0*il5$tv8!d3'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '54.213.121.186',
-    'ec2-54-213-121-186.us-west-2.compute.amazonaws.com'
+    '18.219.109.136',
+    'ec2-18-219-109-136.us-west-2.compute.amazonaws.com'
 ]
 
 APPEND_SLASH=True
@@ -108,12 +108,12 @@ WSGI_APPLICATION = 'myscrumy.wsgi.application'
 
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'linuxjobber',  # linuxjb
+        'USER':'root',  # linuxjobber
+        'PASSWORD': '',  # linuxjobbe
 
-        'USER': 'root',
-
-        }
-    }
-    
+    }}
 
 
 
