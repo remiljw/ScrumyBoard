@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from remiljscrumy.models import *
 from django.http import JsonResponse,HttpResponse,Http404,HttpResponseRedirect
-
+from .forms import *
 from django.contrib.auth import authenticate,login
 from django.contrib.auth.models  import User,Group
 from django.conf import settings
@@ -18,317 +18,317 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 
 # Create your views here.
 
-# def index(request):
-# 	# scrumygoals = ScrumyGoals.objects.all()
-# 	# return HttpResponse(scrumygoals)
-#     if request.method == 'POST':
-#     #this is a method used to send data to the server   
-#         form = SignupForm(request.POST)
-#         #creates the form instance and bounds form data to it
-#         if form .is_valid():#used to validate the form
-#             #add_goal = form.save(commit=False)#save an object bounds in the form
-#             form.save()
-#             username = form.cleaned_data.get('username')
-#             raw_password = form.cleaned_data.get('password1')
-#             # password2 = form.cleaned_data.get('password1')
-#             # if password2 != raw_password:
-#             #     raise form.Http404('password must match')
-#             user = authenticate(username=username, password=raw_password)
-#             user.is_staff=True
-#             login(request,user)
-#             g = Group.objects.get(name='Developer')
-#             g.user_set.add(request.user)
-#             user.save()
-#             return redirect('home')
-#     else:
-#         form = SignupForm()#creates an unbound form with an empty data
-#     return render(request, 'remiljscrumy/index.html', {'form': form})
+def index(request):
+	# scrumygoals = ScrumyGoals.objects.all()
+	# return HttpResponse(scrumygoals)
+    if request.method == 'POST':
+    #this is a method used to send data to the server   
+        form = SignupForm(request.POST)
+        #creates the form instance and bounds form data to it
+        if form .is_valid():#used to validate the form
+            #add_goal = form.save(commit=False)#save an object bounds in the form
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            # password2 = form.cleaned_data.get('password1')
+            # if password2 != raw_password:
+            #     raise form.Http404('password must match')
+            user = authenticate(username=username, password=raw_password)
+            user.is_staff=True
+            login(request,user)
+            g = Group.objects.get(name='Developer')
+            g.user_set.add(request.user)
+            user.save()
+            return redirect('home')
+    else:
+        form = SignupForm()#creates an unbound form with an empty data
+    return render(request, 'remiljscrumy/index.html', {'form': form})
 
 
-# def filterArg(request):
-#     output = ScrumyGoals.objects.filter(goal_name='Learn Django')
-#     return HttpResponse(output)
+def filterArg(request):
+    output = ScrumyGoals.objects.filter(goal_name='Learn Django')
+    return HttpResponse(output)
 
 
-# def move_goal(request, id):
-#     if not request.user.is_authenticated:
-#         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-#     verifygoal = GoalStatus.objects.get(status_name="Verify Goal")
-#     dailygoal = GoalStatus.objects.get(status_name="Daily Goal")
-#     current = request.user
-#     group = current.groups.all()[0]
-#     # form1 = QAMoveForm()
-#     try:
-#         goal = ScrumyGoals.objects.get(id=id)
-#     except ObjectDoesNotExist:
-#         notexist = 'A record with that goal id does not exist'
-#         context = {'not_exist': notexist}
-#         return render(request, 'remiljscrumy/exception.html', context)
-#     if group == Group.objects.get(name='Developer') and current == goal.user:
-#         form = DevMoveGoalForm()
-#         if request.method == 'GET':
-#             return render(request, 'remiljscrumy/movegoal.html', {'form': form, 'goal': goal, 'currentuser': current, 'group': group})
-#         if request.method == 'POST':
-#             form = DevMoveGoalForm(request.POST)
-#             if form.is_valid():
-#                 selected_status = form.save(commit=False)
-#                 selected = form.cleaned_data['goal_status']
-#                 get_status = selected_status.status_name
-#                 choice = GoalStatus.objects.get(id=int(selected))
-#                 goal.goal_status = choice
-#                 goal.save()
-#                 return HttpResponseRedirect(reverse('home'))
+def move_goal(request, id):
+    if not request.user.is_authenticated:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+    verifygoal = GoalStatus.objects.get(status_name="Verify Goal")
+    dailygoal = GoalStatus.objects.get(status_name="Daily Goal")
+    current = request.user
+    group = current.groups.all()[0]
+    # form1 = QAMoveForm()
+    try:
+        goal = ScrumyGoals.objects.get(id=id)
+    except ObjectDoesNotExist:
+        notexist = 'A record with that goal id does not exist'
+        context = {'not_exist': notexist}
+        return render(request, 'remiljscrumy/exception.html', context)
+    if group == Group.objects.get(name='Developer') and current == goal.user:
+        form = DevMoveGoalForm()
+        if request.method == 'GET':
+            return render(request, 'remiljscrumy/movegoal.html', {'form': form, 'goal': goal, 'currentuser': current, 'group': group})
+        if request.method == 'POST':
+            form = DevMoveGoalForm(request.POST)
+            if form.is_valid():
+                selected_status = form.save(commit=False)
+                selected = form.cleaned_data['goal_status']
+                get_status = selected_status.status_name
+                choice = GoalStatus.objects.get(id=int(selected))
+                goal.goal_status = choice
+                goal.save()
+                return HttpResponseRedirect(reverse('home'))
 
-#         else:
-#             form = DevMoveGoalForm()
-#             return render(request, 'remiljscrumy/movegoal.html', {'form': form, 'goal': goal, 'current_user': current, 'group': group})
-#     # if group == Group.objects.get(name='Developer') and current != goal.user:
-#     #     form = DevMoveGoalForm()
+        else:
+            form = DevMoveGoalForm()
+            return render(request, 'remiljscrumy/movegoal.html', {'form': form, 'goal': goal, 'current_user': current, 'group': group})
+    # if group == Group.objects.get(name='Developer') and current != goal.user:
+    #     form = DevMoveGoalForm()
 
-#     #     if request.method == 'GET':
-#     #         notexist = 'YOU DO NO NOT HAVE THE PERMISSION TO CHANGE OTHER USERS GOAL'
-#     #         context = {'not_exist': notexist}
-#     #         return render(request, 'remiljscrumy/exception.html', context)
+    #     if request.method == 'GET':
+    #         notexist = 'YOU DO NO NOT HAVE THE PERMISSION TO CHANGE OTHER USERS GOAL'
+    #         context = {'not_exist': notexist}
+    #         return render(request, 'remiljscrumy/exception.html', context)
 
-#     if group == Group.objects.get(name='Admin') and current == goal.user:
-#         form = AdminChangeGoalForm()
+    if group == Group.objects.get(name='Admin') and current == goal.user:
+        form = AdminChangeGoalForm()
 
-#         if request.method == 'GET':
-#             return render(request, 'remiljscrumy/movegoal.html', {'form': form, 'goal': goal, 'currentuser': current, 'group': group})
-#         if request.method == 'POST':
-#                 form = AdminChangeGoalForm(request.POST)
-#                 if form.is_valid():
-#                     selected_status = form.save(commit=False)
-#                     selected = form.cleaned_data['goal_status']
-#                     get_status = selected_status.status_name
-#                     choice = GoalStatus.objects.get(id=int(selected))
-#                     goal.goal_status = choice
-#                     goal.save()
-#                     return HttpResponseRedirect(reverse('home'))
-#         else:
-#             form = AdminChangeGoalForm()
-#             return render(request, 'remiljscrumy/movegoal.html', {'form': form, 'goal': goal, 'current_user': current, 'group': group})
+        if request.method == 'GET':
+            return render(request, 'remiljscrumy/movegoal.html', {'form': form, 'goal': goal, 'currentuser': current, 'group': group})
+        if request.method == 'POST':
+                form = AdminChangeGoalForm(request.POST)
+                if form.is_valid():
+                    selected_status = form.save(commit=False)
+                    selected = form.cleaned_data['goal_status']
+                    get_status = selected_status.status_name
+                    choice = GoalStatus.objects.get(id=int(selected))
+                    goal.goal_status = choice
+                    goal.save()
+                    return HttpResponseRedirect(reverse('home'))
+        else:
+            form = AdminChangeGoalForm()
+            return render(request, 'remiljscrumy/movegoal.html', {'form': form, 'goal': goal, 'current_user': current, 'group': group})
 
 
-#     if group == Group.objects.get(name='Admin') and current != goal.user:
-#         form = AdminChangeForm()
-#         if request.method == 'GET':
-#                 return render(request, 'remiljscrumy/movegoal.html', {'form': form, 'goal': goal, 'currentuser': current, 'group': group})
-#         if request.method == 'POST':
-#                 form = AdminChangeForm(request.POST)
-#                 if form.is_valid():
-#                     selected_status = form.save(commit=False)
-#                     selected = form.cleaned_data['goal_status']
-#                     get_status = selected_status.status_name
-#                     choice = GoalStatus.objects.get(id=int(selected))
-#                     goal.goal_status = choice
-#                     goal.save()
-#                     return HttpResponseRedirect(reverse('home'))
-#         else:
-#                 form = AdminChangeForm()
-#                 return render(request, 'remiljscrumy/movegoal.html',{'form': form, 'goal': goal, 'currentuser': current, 'group': group})
+    if group == Group.objects.get(name='Admin') and current != goal.user:
+        form = AdminChangeForm()
+        if request.method == 'GET':
+                return render(request, 'remiljscrumy/movegoal.html', {'form': form, 'goal': goal, 'currentuser': current, 'group': group})
+        if request.method == 'POST':
+                form = AdminChangeForm(request.POST)
+                if form.is_valid():
+                    selected_status = form.save(commit=False)
+                    selected = form.cleaned_data['goal_status']
+                    get_status = selected_status.status_name
+                    choice = GoalStatus.objects.get(id=int(selected))
+                    goal.goal_status = choice
+                    goal.save()
+                    return HttpResponseRedirect(reverse('home'))
+        else:
+                form = AdminChangeForm()
+                return render(request, 'remiljscrumy/movegoal.html',{'form': form, 'goal': goal, 'currentuser': current, 'group': group})
    
 
 
 
 
-#     if group == Group.objects.get(name='Owner'):
-#         form = OwnerChangeForm()
+    if group == Group.objects.get(name='Owner'):
+        form = OwnerChangeForm()
 
-#         if request.method == 'GET':
-#             return render(request, 'remiljscrumy/movegoal.html', {'form': form, 'goal': goal, 'currentuser': current, 'group': group})
-#         if request.method == 'POST':
-#                 form = OwnerChangeForm(request.POST)
-#                 if form.is_valid():
-#                     selected_status = form.save(commit=False)
-#                     get_status = selected_status.goal_status
-#                     goal.goal_status = get_status
-#                     goal.save()
-#                     return HttpResponseRedirect(reverse('home'))
-#         else:
-#             form = OwnerChangeForm()
-#             return render(request, 'remiljscrumy/movegoal.html',{'form': form, 'goal': goal, 'current_user': current,  'group': group})
-#     # else:
-#     #     notexist = 'You cannot move other users goals'
-#     #     context = {'not_exist': notexist}
-#     #     return render(request, 'maleemmyscrumy/exception.html', context)
+        if request.method == 'GET':
+            return render(request, 'remiljscrumy/movegoal.html', {'form': form, 'goal': goal, 'currentuser': current, 'group': group})
+        if request.method == 'POST':
+                form = OwnerChangeForm(request.POST)
+                if form.is_valid():
+                    selected_status = form.save(commit=False)
+                    get_status = selected_status.goal_status
+                    goal.goal_status = get_status
+                    goal.save()
+                    return HttpResponseRedirect(reverse('home'))
+        else:
+            form = OwnerChangeForm()
+            return render(request, 'remiljscrumy/movegoal.html',{'form': form, 'goal': goal, 'current_user': current,  'group': group})
+    # else:
+    #     notexist = 'You cannot move other users goals'
+    #     context = {'not_exist': notexist}
+    #     return render(request, 'maleemmyscrumy/exception.html', context)
 
-#     if group == Group.objects.get(name='Quality Assurance') and  goal.goal_status == verifygoal:
-#         form = QAChangeGoalForm()
+    if group == Group.objects.get(name='Quality Assurance') and  goal.goal_status == verifygoal:
+        form = QAChangeGoalForm()
 
-#         if request.method == 'GET':
-#             return render(request, 'remiljscrumy/movegoal.html', {'form': form, 'goal': goal, 'currentuser': current, 'group': group})
-#         if request.method == 'POST':
-#             form = QAChangeGoalForm(request.POST)
-#             if form.is_valid():
-#                 selected_status = form.save(commit=False)
-#                 selected = form.cleaned_data['goal_status']
-#                 get_status = selected_status.status_name
-#                 choice = GoalStatus.objects.get(id=int(selected))
-#                 goal.goal_status = choice
-#                 goal.save()
-#                 return HttpResponseRedirect(reverse('home'))
-#         else:
-#             form = QAChangeGoalForm()
-#             return render(request, 'remiljscrumy/movegoal.html',{'form': form, 'goal': goal, 'currentuser': current, 'group': group})
+        if request.method == 'GET':
+            return render(request, 'remiljscrumy/movegoal.html', {'form': form, 'goal': goal, 'currentuser': current, 'group': group})
+        if request.method == 'POST':
+            form = QAChangeGoalForm(request.POST)
+            if form.is_valid():
+                selected_status = form.save(commit=False)
+                selected = form.cleaned_data['goal_status']
+                get_status = selected_status.status_name
+                choice = GoalStatus.objects.get(id=int(selected))
+                goal.goal_status = choice
+                goal.save()
+                return HttpResponseRedirect(reverse('home'))
+        else:
+            form = QAChangeGoalForm()
+            return render(request, 'remiljscrumy/movegoal.html',{'form': form, 'goal': goal, 'currentuser': current, 'group': group})
 
-#     # if group == Group.objects.get(name='Quality Assurance') and current != goal.user and goal.goal_status == verifygoal:
-#     #     form = QAChangeGoalForm()
-#     #     if request.method == 'GET':
-#     #             return render(request, 'remiljscrumy/movegoal.html', {'form': form, 'goal': goal, 'currentuser': current, 'group': group})
-#     #     if request.method == 'POST':
-#     #             form = QAChangeGoalForm(request.POST)
-#     #             if form.is_valid():
-#     #                 selected_status = form.save(commit=False)
-#     #                 selected = form.cleaned_data['goal_status']
-#     #                 get_status = selected_status.status_name
-#     #                 choice = GoalStatus.objects.get(id=int(selected))
-#     #                 goal.goal_status = choice
-#     #                 goal.save()
-#     #                 return HttpResponseRedirect(reverse('home'))
-#     #     else:
-#     #             form = QAChangeGoalForm()
-#     #             return render(request, 'remiljscrumy/movegoal.html',{'form': form, 'goal': goal, 'currentuser': current, 'group': group})
-#     else : 
-#         form = QAMoveForm()
-#         if request.method == 'GET':
-#                 return render(request, 'remiljscrumy/movegoal.html', {'form': form, 'goal': goal, 'currentuser': current, 'group': group})
-#         if request.method == 'POST':
-#                 form = QAMoveForm(request.POST)
-#                 if form.is_valid():
-#                     selected_status = form.save(commit=False)
-#                     selected = form.cleaned_data['goal_status']
-#                     get_status = selected_status.status_name
-#                     choice = GoalStatus.objects.get(id=int(selected))
-#                     goal.goal_status = choice
-#                     goal.save()
-#                     return HttpResponseRedirect(reverse('home'))
-#         # return render(request, 'remiljscrumy/movegoal.html',{'form': form, 'goal': goal, 'currentuser': current, 'group': group})
-#         # notexist = 'You can only move goal from verify goals to done goals'
-#         # context = {'not_exist': notexist}
-#         # return render(request, 'remiljscrumy/exception.html', context)
+    # if group == Group.objects.get(name='Quality Assurance') and current != goal.user and goal.goal_status == verifygoal:
+    #     form = QAChangeGoalForm()
+    #     if request.method == 'GET':
+    #             return render(request, 'remiljscrumy/movegoal.html', {'form': form, 'goal': goal, 'currentuser': current, 'group': group})
+    #     if request.method == 'POST':
+    #             form = QAChangeGoalForm(request.POST)
+    #             if form.is_valid():
+    #                 selected_status = form.save(commit=False)
+    #                 selected = form.cleaned_data['goal_status']
+    #                 get_status = selected_status.status_name
+    #                 choice = GoalStatus.objects.get(id=int(selected))
+    #                 goal.goal_status = choice
+    #                 goal.save()
+    #                 return HttpResponseRedirect(reverse('home'))
+    #     else:
+    #             form = QAChangeGoalForm()
+    #             return render(request, 'remiljscrumy/movegoal.html',{'form': form, 'goal': goal, 'currentuser': current, 'group': group})
+    else : 
+        form = QAMoveForm()
+        if request.method == 'GET':
+                return render(request, 'remiljscrumy/movegoal.html', {'form': form, 'goal': goal, 'currentuser': current, 'group': group})
+        if request.method == 'POST':
+                form = QAMoveForm(request.POST)
+                if form.is_valid():
+                    selected_status = form.save(commit=False)
+                    selected = form.cleaned_data['goal_status']
+                    get_status = selected_status.status_name
+                    choice = GoalStatus.objects.get(id=int(selected))
+                    goal.goal_status = choice
+                    goal.save()
+                    return HttpResponseRedirect(reverse('home'))
+        # return render(request, 'remiljscrumy/movegoal.html',{'form': form, 'goal': goal, 'currentuser': current, 'group': group})
+        # notexist = 'You can only move goal from verify goals to done goals'
+        # context = {'not_exist': notexist}
+        # return render(request, 'remiljscrumy/exception.html', context)
 
-# # def move_goal(request, goal_id):
-# #     #response = ScrumyGoals.objects.get(goal_id=goal_id)
-# #     # try:
-# #     #goal = ScrumyGoals.objects.get(goal_id=goal_id)
-# #     # except ScrumyGoals.DoesNotExist:
-# #     #     raise Http404 ('A record with that goal id does not exist')
-# #     instance = get_object_or_404(ScrumyGoals,goal_id=goal_id)
-# #     form = MoveGoalForm(request.POST or None, instance=instance)
-# #     if form. is_valid():
-# #         instance = form.save(commit=False)
-# #         instance.save()
-# #         return redirect('home')
-# #     context={
-# #         'goal_id': instance.goal_id,
-# #         'user': instance.user,
-# #         'goal_status': instance.goal_status,
-# #         'form':form,
-# #         }
-# #     return render(request, 'remiljscrumy/exception.html', context)
-#             #move_goal = form.save(commit=False)
-#             # move_goal = 
-#             # form.save()
-#             # # goal_name = form.cleaned_data.get('goal_name')
-#             # # ScrumyGoals.objects.get(goal_name)
-#             # return redirect('home')
-#     # def form_valid(self, form):
-#     #          form.instance.goal_status = self.request.user
-#     #          return super(addgoalForm, self).form_valid(form)
+# def move_goal(request, goal_id):
+#     #response = ScrumyGoals.objects.get(goal_id=goal_id)
+#     # try:
+#     #goal = ScrumyGoals.objects.get(goal_id=goal_id)
+#     # except ScrumyGoals.DoesNotExist:
+#     #     raise Http404 ('A record with that goal id does not exist')
+#     instance = get_object_or_404(ScrumyGoals,goal_id=goal_id)
+#     form = MoveGoalForm(request.POST or None, instance=instance)
+#     if form. is_valid():
+#         instance = form.save(commit=False)
+#         instance.save()
+#         return redirect('home')
+#     context={
+#         'goal_id': instance.goal_id,
+#         'user': instance.user,
+#         'goal_status': instance.goal_status,
+#         'form':form,
+#         }
+#     return render(request, 'remiljscrumy/exception.html', context)
+            #move_goal = form.save(commit=False)
+            # move_goal = 
+            # form.save()
+            # # goal_name = form.cleaned_data.get('goal_name')
+            # # ScrumyGoals.objects.get(goal_name)
+            # return redirect('home')
+    # def form_valid(self, form):
+    #          form.instance.goal_status = self.request.user
+    #          return super(addgoalForm, self).form_valid(form)
     
 
-#     # }
-#     # return render(request, 'remiljscrumy/exception.html', context=gdict)
-#     #return HttpResponse(response)
-#     # return HttpResponse('%s is the response at the record of goal_id %s' % (response, goal_id))'''
+    # }
+    # return render(request, 'remiljscrumy/exception.html', context=gdict)
+    #return HttpResponse(response)
+    # return HttpResponse('%s is the response at the record of goal_id %s' % (response, goal_id))'''
 
-# from random import randint 
-# def add_goal(request):
-#     # existing_id = ScrumyGoals.objects.order_by('goal_id')
-#     # while True:
-#     #     goal_id = randint(1000, 10000)  #returns a random number between 1000 and 9999           
-#     #     if goal_id not in existing_id:        
-#     #         pr = ScrumyGoals.objects.create(goal_name='Keep Learning Django', goal_id=goal_id, created_by='Louis', moved_by="Louis", goal_status=GoalStatus.objects.get(pk=1), user=User.objects.get(pk=6))
-#     #         break
-#     #  form = CreateGoalForm
-#     # if request.method == 'POST':
-#     #     form = CreateGoalForm(request.POST)
-#     #     if form .is_valid():
-#     #         add_goals = form.save(commit=False)
-#     #         add_goals = form.save()
-#     #         #form.save()
-#     #         return redirect('home')
-#     # else:
-#     #     form = CreateGoalForm()
-#     return render(request, 'remiljscrumy/addgoal.html', {'form': form})
+from random import randint 
+def add_goal(request):
+    # existing_id = ScrumyGoals.objects.order_by('goal_id')
+    # while True:
+    #     goal_id = randint(1000, 10000)  #returns a random number between 1000 and 9999           
+    #     if goal_id not in existing_id:        
+    #         pr = ScrumyGoals.objects.create(goal_name='Keep Learning Django', goal_id=goal_id, created_by='Louis', moved_by="Louis", goal_status=GoalStatus.objects.get(pk=1), user=User.objects.get(pk=6))
+    #         break
+    #  form = CreateGoalForm
+    # if request.method == 'POST':
+    #     form = CreateGoalForm(request.POST)
+    #     if form .is_valid():
+    #         add_goals = form.save(commit=False)
+    #         add_goals = form.save()
+    #         #form.save()
+    #         return redirect('home')
+    # else:
+    #     form = CreateGoalForm()
+    return render(request, 'remiljscrumy/addgoal.html', {'form': form})
 
-# def home(request):
-#     '''# all=','.join([eachgoal.goal_name for eachgoal in ScrumyGoals.objects.all()])  
-#     # home = ScrumyGoals.objects.filter(goal_name='keep learning django')
-#     # return HttpResponse(all)
-#     #homedict = {'goal_name':ScrumyGoals.objects.get(pk=3).goal_name,'goal_id':ScrumyGoals.objects.get(pk=3).goal_id, 'user': ScrumyGoals.objects.get(pk=3).user,}
-#     user = User.objects.get(email="louisoma@linuxjobber.com")
-#     name = user.scrumygoal.all()
-#     homedict={'goal_name':ScrumyGoals.objects.get(pk=1).goal_name,'goal_id':ScrumyGoals.objects.get(pk=1).goal_id,'user':ScrumyGoals.objects.get(pk=1).user,
-#              'goal_name1':ScrumyGoals.objects.get(pk=2).goal_name,'goal_id1':ScrumyGoals.objects.get(pk=2).goal_id,'user':ScrumyGoals.objects.get(pk=2).user,
-#              'goal_name2':ScrumyGoals.objects.get(pk=3).goal_name,'goal_id2':ScrumyGoals.objects.get(pk=3).goal_id,'user2':ScrumyGoals.objects.get(pk=3).user}'''
+def home(request):
+    '''# all=','.join([eachgoal.goal_name for eachgoal in ScrumyGoals.objects.all()])  
+    # home = ScrumyGoals.objects.filter(goal_name='keep learning django')
+    # return HttpResponse(all)
+    #homedict = {'goal_name':ScrumyGoals.objects.get(pk=3).goal_name,'goal_id':ScrumyGoals.objects.get(pk=3).goal_id, 'user': ScrumyGoals.objects.get(pk=3).user,}
+    user = User.objects.get(email="louisoma@linuxjobber.com")
+    name = user.scrumygoal.all()
+    homedict={'goal_name':ScrumyGoals.objects.get(pk=1).goal_name,'goal_id':ScrumyGoals.objects.get(pk=1).goal_id,'user':ScrumyGoals.objects.get(pk=1).user,
+             'goal_name1':ScrumyGoals.objects.get(pk=2).goal_name,'goal_id1':ScrumyGoals.objects.get(pk=2).goal_id,'user':ScrumyGoals.objects.get(pk=2).user,
+             'goal_name2':ScrumyGoals.objects.get(pk=3).goal_name,'goal_id2':ScrumyGoals.objects.get(pk=3).goal_id,'user2':ScrumyGoals.objects.get(pk=3).user}'''
    
-#     # form = CreateGoalForm
-#     # if request.method == 'POST':
-#     #     form = CreateGoalForm(request.POST)
-#     #     if form .is_valid():
-#     #         add_goal = form.save(commit=True)
-#     #         add_goal = form.save()
-#     # #         #form.save()
-#     #         return redirect('home')
+    # form = CreateGoalForm
+    # if request.method == 'POST':
+    #     form = CreateGoalForm(request.POST)
+    #     if form .is_valid():
+    #         add_goal = form.save(commit=True)
+    #         add_goal = form.save()
+    # #         #form.save()
+    #         return redirect('home')
 
-#     current = request.user #gets the logged in user
-#     week = GoalStatus.objects.get(pk=1) #gets status name weekly goal
-#     day = GoalStatus.objects.get(pk=2) #gets status name daily goal
-#     verify = GoalStatus.objects.get(pk=3)#gets status name verify goals
-#     done = GoalStatus.objects.get(pk=4)#gets status name done goals
-#     user = User.objects.all() #gets all users in the db
-#     weeklygoal = ScrumyGoals.objects.filter(goal_status=week) #get all goals stored as weeklygoal
-#     dailygoal = ScrumyGoals.objects.filter(goal_status=day) #get all goals stored as dailygoal
-#     verifygoal = ScrumyGoals.objects.filter(goal_status=verify) #get all goals stored as verifygoal
-#     donegoal = ScrumyGoals.objects.filter(goal_status=done) #get all goals stored as donegoal
-#     groups = current.groups.all()# gets the group(s) that the logged in user belongs to
-#     #cug= current.ScrumyGoals.all()#gets all the goals of the current user
-#     dev = Group.objects.get(name='Developer') #Gets group name Developer
-#     owner = Group.objects.get(name='Owner') #Gets group name Owner
-#     admin = Group.objects.get(name='Admin') #Gets group name Admin
-#     qa = Group.objects.get(name='Quality Assurance') #Gets group name Quality assurance
-#     form = CreateGoalForm()
-#     context = {'user': user, 'weeklygoal': weeklygoal, 'dailygoal': dailygoal, 'verifygoal': verifygoal,
-#                        'donegoal': donegoal,'form':form,'current': current, 'groups': groups,'dev': dev,'owner':owner,'admin':admin,'qa':qa}
+    current = request.user #gets the logged in user
+    week = GoalStatus.objects.get(pk=1) #gets status name weekly goal
+    day = GoalStatus.objects.get(pk=2) #gets status name daily goal
+    verify = GoalStatus.objects.get(pk=3)#gets status name verify goals
+    done = GoalStatus.objects.get(pk=4)#gets status name done goals
+    user = User.objects.all() #gets all users in the db
+    weeklygoal = ScrumyGoals.objects.filter(goal_status=week) #get all goals stored as weeklygoal
+    dailygoal = ScrumyGoals.objects.filter(goal_status=day) #get all goals stored as dailygoal
+    verifygoal = ScrumyGoals.objects.filter(goal_status=verify) #get all goals stored as verifygoal
+    donegoal = ScrumyGoals.objects.filter(goal_status=done) #get all goals stored as donegoal
+    groups = current.groups.all()# gets the group(s) that the logged in user belongs to
+    #cug= current.ScrumyGoals.all()#gets all the goals of the current user
+    dev = Group.objects.get(name='Developer') #Gets group name Developer
+    owner = Group.objects.get(name='Owner') #Gets group name Owner
+    admin = Group.objects.get(name='Admin') #Gets group name Admin
+    qa = Group.objects.get(name='Quality Assurance') #Gets group name Quality assurance
+    form = CreateGoalForm()
+    context = {'user': user, 'weeklygoal': weeklygoal, 'dailygoal': dailygoal, 'verifygoal': verifygoal,
+                       'donegoal': donegoal,'form':form,'current': current, 'groups': groups,'dev': dev,'owner':owner,'admin':admin,'qa':qa}
 
 
-#     if not request.user.is_authenticated:
-#         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-#         context = {'user': user, 'weeklygoal': weeklygoal, 'dailygoal': dailygoal, 'verifygoal': verifygoal,
-#                        'donegoal': donegoal,'form':form,'current': current, 'groups': groups,'dev': dev,'owner':owner,'admin':admin,'qa':qa}
-#     if current.is_authenticated:
-#         if dev in groups or qa in groups or owner in groups:
-#             context = {'user': user, 'weeklygoal': weeklygoal, 'dailygoal': dailygoal, 'verifygoal': verifygoal,
-#                        'donegoal': donegoal,'form':form,'current': current, 'groups': groups,'dev': dev,'owner':owner,'admin':admin,'qa':qa}
-#             # if request.method == 'GET':
-#             #     return render(request, 'remiljscrumy/home.html', context)
-#             form = CreateGoalForm()
-#             context = {'user': user, 'weeklygoal': weeklygoal, 'dailygoal': dailygoal, 'verifygoal': verifygoal,
-#                        'donegoal': donegoal, 'form': form, 'current': current, 'groups': groups,'dev': dev,'owner':owner,'admin':admin,'qa':qa}
-#         if request.method == 'POST':
-#             form = CreateGoalForm(request.POST)
-#             if form.is_valid():
-#                 post = form.save(commit=False)
-#                 status_name = GoalStatus(id=1)
-#                 post.goal_status = status_name
-#                 post.user = current
-#                 post = form.save()
-#         elif admin in groups:
-#              context = {'user': user, 'weeklygoal': weeklygoal, 'dailygoal': dailygoal, 'verifygoal': verifygoal,
-#                        'donegoal': donegoal,'form':form,'current': current, 'groups': groups,'dev': dev,'owner':owner,'admin':admin,'qa':qa}
-#         return render(request, 'remiljscrumy/home.html', context)
+    if not request.user.is_authenticated:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        context = {'user': user, 'weeklygoal': weeklygoal, 'dailygoal': dailygoal, 'verifygoal': verifygoal,
+                       'donegoal': donegoal,'form':form,'current': current, 'groups': groups,'dev': dev,'owner':owner,'admin':admin,'qa':qa}
+    if current.is_authenticated:
+        if dev in groups or qa in groups or owner in groups:
+            context = {'user': user, 'weeklygoal': weeklygoal, 'dailygoal': dailygoal, 'verifygoal': verifygoal,
+                       'donegoal': donegoal,'form':form,'current': current, 'groups': groups,'dev': dev,'owner':owner,'admin':admin,'qa':qa}
+            # if request.method == 'GET':
+            #     return render(request, 'remiljscrumy/home.html', context)
+            form = CreateGoalForm()
+            context = {'user': user, 'weeklygoal': weeklygoal, 'dailygoal': dailygoal, 'verifygoal': verifygoal,
+                       'donegoal': donegoal, 'form': form, 'current': current, 'groups': groups,'dev': dev,'owner':owner,'admin':admin,'qa':qa}
+        if request.method == 'POST':
+            form = CreateGoalForm(request.POST)
+            if form.is_valid():
+                post = form.save(commit=False)
+                status_name = GoalStatus(id=1)
+                post.goal_status = status_name
+                post.user = current
+                post = form.save()
+        elif admin in groups:
+             context = {'user': user, 'weeklygoal': weeklygoal, 'dailygoal': dailygoal, 'verifygoal': verifygoal,
+                       'donegoal': donegoal,'form':form,'current': current, 'groups': groups,'dev': dev,'owner':owner,'admin':admin,'qa':qa}
+        return render(request, 'remiljscrumy/home.html', context)
 
 
 def filtered_users(project_id):
@@ -487,6 +487,8 @@ class ScrumUserViewSet(viewsets.ModelViewSet):
             scrum_user = ScrumUser(user=user, nickname=request.data['full_name'])
             scrum_user.save()
             if request.data['usertype'] == 'Owner':
+                group = Group.objects.get(name=request.data['usertype'])
+                group.user_set.add(user)
                 scrum_project = ScrumProject(name=request.data['projname'])
                 scrum_project.save()
                 scrum_project_role = ScrumProjectRole(role="Owner", user=scrum_user, project=scrum_project)
@@ -599,7 +601,7 @@ class ScrumGoalViewSet(viewsets.ModelViewSet):
         
             if to_id == 5:
                 if scrum_project_a.role == 'Developer':
-                    if request.user != scrum_project_b.user.user:
+                    if request.user != scrum_project_b.user:
                         return JsonResponse({'message': 'Permission Denied: Unauthorized Deletion of Goal.', 'data': filtered_users(request.data['project_id'])})
                 del_goal = scrum_project.scrumygoals_set.get(id=goal_id)
                 del_goal.visible = False
@@ -608,12 +610,15 @@ class ScrumGoalViewSet(viewsets.ModelViewSet):
                 return JsonResponse({'message':'Goal Removed Successfully', 'data':filtered_users(request.data['project_id'])})
             else:
                 goal_item = scrum_project.scrumygoals_set.get(id=goal_id)
-                group = scrum_project_a.role
+                group = request.user.groups.all()[0].name
                 from_allowed = []
                 to_allowed = []
                     
                 if group == 'Developer':
-                    if request.user != goal_item.user.user:
+                    if request.user != scrum_project_b.user.user:
+                        # from_allowed = [1, 2, 3]
+                        # to_allowed = [1, 2, 3]
+                    
                         return JsonResponse({'message':'Permission Denied: Unauthorized Movement of Goal', 'data':filtered_users(request.data['project_id'])})
                            
                 if group == 'Owner':
@@ -623,8 +628,8 @@ class ScrumGoalViewSet(viewsets.ModelViewSet):
                     from_allowed = [1, 2, 3]
                     to_allowed = [1, 2, 3]
                 elif group == 'Developer':
-                    from_allowed = [1, 2]
-                    to_allowed = [1, 2]
+                    from_allowed = [1, 2, 3]
+                    to_allowed = [1, 2, 3]
                 elif group == 'Quality Analyst':
                     from_allowed = [3, 4]
                     to_allowed = [3, 4]
@@ -722,8 +727,8 @@ def jwt_response_payload_handler(token, user=None, request=None):
     project = ScrumProject.objects.get(name__iexact=request.data['project'])
     project_id = project.id
     scrum_project = ScrumProject.objects.get(id=project_id)
-    scrum_project_a = scrum_project.scrumprojectrole_set.get(user=user.scrumuser)
-    group = scrum_project_a.role
+   
+    
     try:
         project = ScrumProject.objects.get(name__iexact=request.data['project'])
     except ScrumProject.DoesNotExist:
@@ -732,15 +737,17 @@ def jwt_response_payload_handler(token, user=None, request=None):
     if project.scrumprojectrole_set.filter(user=user.scrumuser).count() == 0:
         scrum_project_role = ScrumProjectRole(role="Developer", user=user.scrumuser, project=project)
         scrum_project_role.save()
+        group = Group.objects.get(name="Developer")
+        group.user_set.add(user)
 
         
     return {
         'token': token,
         'name': user.scrumuser.nickname,
         'message': 'WELCOME!.',
-        'role': group,
+        'role': user.groups.all()[0].name,
         'project_id': project.id,
-        'role_id': project.scrumprojectrole_set.get(user=user.scrumuser).id,
+        # 'role_id': project.scrumprojectrole_set.get(user=user.scrumuser).id,
         'data' : filtered_users(project_id)
     }
     
