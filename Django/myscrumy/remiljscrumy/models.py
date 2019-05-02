@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.contrib.auth.models import AbstractUser
+# from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 class GoalStatus(models.Model):
@@ -102,20 +102,20 @@ class ScrumyHistory(models.Model):
 
 # Create your models here.
 
-class CustomUser(models.Model):
-    email = models.CharField(max_length=50)
-    subscription  = models.IntegerField(default=1,choices=((0, 'No'), (1, 'Yes')))
-    role = models.IntegerField(default=6)
-    profile_img = models.TextField(default='https://res.cloudinary.com/louiseyoma/image/upload/v1546701687/profile_pic.png')
-    pwd_reset_token = models.CharField(max_length=100,default='000011112222')
+# class CustomUser(models.Model):
+#     email = models.CharField(max_length=50)
+#     subscription  = models.IntegerField(default=1,choices=((0, 'No'), (1, 'Yes')))
+#     role = models.IntegerField(default=6)
+#     profile_img = models.TextField(default='https://res.cloudinary.com/louiseyoma/image/upload/v1546701687/profile_pic.png')
+#     pwd_reset_token = models.CharField(max_length=100,default='000011112222')
 
-    def __str__(self):
-        return self.email
+#     def __str__(self):
+#         return self.email
 
-class Unsubscriber(models.Model):
-    if CustomUser.subscription == 0:
-        email = models.ForeignKey(CustomUser,on_delete = models.CASCADE,null=True)
+# class Unsubscriber(models.Model):
+#     if CustomUser.subscription == 0:
+#         email = models.ForeignKey(CustomUser,on_delete = models.CASCADE,null=True)
         
-    def __str__(self):
-        return self.email
+#     def __str__(self):
+#         return self.email
 

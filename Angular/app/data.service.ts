@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 })
 export class DataService {
 
-  public domain_name = '54.213.121.186:8000';
+  public domain_name = '18.219.109.136:8000';
 
 
   public username;

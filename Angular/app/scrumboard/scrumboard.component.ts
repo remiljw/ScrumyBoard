@@ -27,7 +27,7 @@ export class ScrumboardComponent implements OnInit {
     this.dataservice.authOptions = {
       headers: new HttpHeaders({'Content-Type': 'application/json', 'Authorization': 'JWT ' + sessionStorage.getItem('token')})
       };
-    this.http.get('http://54.213.121.186:8000/api/scrumusers/',this.dataservice.httpOptions).subscribe(
+    this.http.get('http://18.219.109.136:8000/api/scrumusers/',this.dataservice.httpOptions).subscribe(
     data => {
       console.log(data);
       for(let i = 0; i < data['length']; i++){

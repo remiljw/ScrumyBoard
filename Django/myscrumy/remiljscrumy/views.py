@@ -18,9 +18,9 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 
 # Create your views here.
 
-def index(request):
-	# scrumygoals = ScrumyGoals.objects.all()
-	# return HttpResponse(scrumygoals)
+'''def index(request):
+    # scrumygoals = ScrumyGoals.objects.all()
+    # return HttpResponse(scrumygoals)
     if request.method == 'POST':
     #this is a method used to send data to the server   
         form = SignupForm(request.POST)
@@ -243,8 +243,8 @@ def move_goal(request, id):
     #return HttpResponse(response)
     # return HttpResponse('%s is the response at the record of goal_id %s' % (response, goal_id))'''
 
-from random import randint 
-def add_goal(request):
+# from random import randint 
+# def add_goal(request):
     # existing_id = ScrumyGoals.objects.order_by('goal_id')
     # while True:
     #     goal_id = randint(1000, 10000)  #returns a random number between 1000 and 9999           
@@ -261,9 +261,9 @@ def add_goal(request):
     #         return redirect('home')
     # else:
     #     form = CreateGoalForm()
-    return render(request, 'remiljscrumy/addgoal.html', {'form': form})
+    # return render(request, 'remiljscrumy/addgoal.html', {'form': form})
 
-def home(request):
+# def home(request):
     '''# all=','.join([eachgoal.goal_name for eachgoal in ScrumyGoals.objects.all()])  
     # home = ScrumyGoals.objects.filter(goal_name='keep learning django')
     # return HttpResponse(all)
@@ -282,7 +282,7 @@ def home(request):
     #         add_goal = form.save()
     # #         #form.save()
     #         return redirect('home')
-
+'''
     current = request.user #gets the logged in user
     week = GoalStatus.objects.get(pk=1) #gets status name weekly goal
     day = GoalStatus.objects.get(pk=2) #gets status name daily goal
@@ -329,7 +329,7 @@ def home(request):
              context = {'user': user, 'weeklygoal': weeklygoal, 'dailygoal': dailygoal, 'verifygoal': verifygoal,
                        'donegoal': donegoal,'form':form,'current': current, 'groups': groups,'dev': dev,'owner':owner,'admin':admin,'qa':qa}
         return render(request, 'remiljscrumy/home.html', context)
-
+'''
 
 def filtered_users(project_id):
     project = ScrumProjectSerializer(ScrumProject.objects.get(id=project_id)).data

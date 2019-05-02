@@ -23,7 +23,7 @@ admin.site.register(ScrumProject)
 # 	form = CustomUserChangeForm
 # 	model = CustomUser
 # 	list_display = ['email', 'username', 'role', 'pwd_reset_token','subscription']
+# admin.site.register(CustomUser,)
 
-admin.site.register(CustomUser,)
+# admin.site.register(Unsubscriber)
 
-admin.site.register(Unsubscriber)

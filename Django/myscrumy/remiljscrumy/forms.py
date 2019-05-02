@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 #importing our ModelForms from django
 from .models import *
 #importing your models from models.py
-class SignupForm(UserCreationForm):
+'''class SignupForm(UserCreationForm):
 	first_name = forms.CharField(max_length=30, required=True,)
 	last_name = forms.CharField(max_length=30, required=True, )
 	email = forms.EmailField(max_length=254,)
@@ -123,4 +123,4 @@ class QAMoveForm(forms.ModelForm):
 #     model = CustomUser
 #     fields = ('username','email')
     
-    
+    '''
